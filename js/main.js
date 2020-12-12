@@ -108,7 +108,7 @@ const showGlassesList = () => {
     // tao doi tuong kinh va them kinh vao danh sach kinh
     // duyet mang data
     dataGlasses.map((item, index ) => {
-        let gl = new Glasses(item.id, item.src, item.virtualImg, item.brand, item.name, item.color, item.description);
+        let gl = new Glasses(item.id, item.src, item.virtualImg, item.brand, item.name, item.color, item.price, item.description);
         glassesList.addGlasses(gl);
     });
     console.log(glassesList);
@@ -117,3 +117,46 @@ const showGlassesList = () => {
 
 showGlassesList();
 
+const tryOnGlasees = (e) => {
+    // console.log(e.target.getAttribute('data-id'));
+    let glID = e.target.getAttribute('data-id');
+    let glObject = {};
+    for(let value of glassesList.glist) {
+        if(value.id == glID) {
+            glObject = value;
+        }
+        
+    }
+    showInfo(glObject);
+}
+
+// chuyen ham tryOn thanh window de dau cung dung dc
+window.tryOnGlasees = tryOnGlasees;
+
+const showInfo = (glObject) => {
+    let divAvatar = getEle('avatar');
+    let divInfo = getEle('glassesInfo');
+
+    divAvatar.innerHTML = `
+        <img src="${glObject.virtualImg}">
+    `;
+
+    let status = "";
+    if (glObject.status) {
+        status = "Stoking";
+    } else {
+        status = "Sold Out";
+    }
+
+    divInfo.innerHTML = `
+        <h5>${glObject.name} - ${glObject.brand} (${glObject.color})</h5>
+        <p class="card-text">
+            <span class="btn btn-danger btn-sm mr-2">$${glObject.price}</span>
+            <span class="text-success">$${status}</span>
+        </p>
+        <p class="card-text">
+            ${glObject.description}
+        </p>
+    `;
+    divInfo.style.display = 'block';
+}
